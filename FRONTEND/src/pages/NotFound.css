@@ -1,0 +1,17 @@
+.notfound-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.notfound-container h1 {
+  font-size: 6rem;
+}
+
+.notfound-container a {
+  margin-top: 20px;
+  text-decoration: none;
+  color: #007bff;
+}

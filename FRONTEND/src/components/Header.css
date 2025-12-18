@@ -1,0 +1,265 @@
+/* General Header Styling */
+.header {
+  width: 100%;
+  background: #111;
+  padding: 15px 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 1rem;
+  height:50px;
+}
+
+/* Hamburger Menu Button - Hidden by default */
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 25px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1002;
+  position: absolute;
+  left: 20px;
+  margin-top: .5rem;
+}
+
+.hamburger-line {
+  width: 100%;
+  height: 3px;
+  background: #fff;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+/* Hamburger animation when open */
+.hamburger-btn .hamburger-line:nth-child(1).open {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger-btn .hamburger-line:nth-child(2).open {
+  opacity: 0;
+}
+
+.hamburger-btn .hamburger-line:nth-child(3).open {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Navigation container */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Navigation links */
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 8px 12px;
+  transition: 0.3s ease-in-out;
+  border-radius: 4px;
+}
+
+/* Hover animation */
+.nav-link:hover {
+  background: #444;
+  color: #ffcc00;
+}
+
+/* Profile Icon Link */
+.profile-icon-link {
+  position: absolute;
+  right: 20px;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+  z-index: 1001;
+}
+
+.profile-icon-link:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.6);
+}
+
+.profile-icon-link svg {
+  width: 24px;
+  height: 24px;
+  color: white;
+}
+
+/* Menu overlay for mobile */
+.menu-overlay {
+  display: none;
+}
+
+/* Responsive Design - Tablets */
+@media (max-width: 768px) {
+  .nav {
+    gap: 20px;
+  }
+
+  .nav-link {
+    font-size: 15px;
+    padding: 7px 11px;
+  }
+}
+
+/* Responsive Design - Mobile (< 600px) */
+@media (max-width: 600px) {
+  .header {
+    padding: 12px 20px;
+    justify-content: flex-start;
+  }
+
+  /* Show hamburger button */
+  .hamburger-btn {
+    display: flex;
+  }
+
+  /* Hide navigation by default on mobile */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 280px;
+    height: 100vh;
+    background: #1a1a1a;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 80px 20px 20px;
+    gap: 0;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+    transition: left 0.3s ease;
+    z-index: 1001;
+  }
+
+  /* Show navigation when open */
+  .nav-open {
+    left: 0;
+  }
+
+  /* Mobile navigation links */
+  .nav-link {
+    width: 100%;
+    padding: 15px 20px;
+    font-size: 16px;
+    border-radius: 0;
+    border-bottom: 1px solid #333;
+    transition: all 0.2s ease;
+  }
+
+  .nav-link:hover {
+    background: #2a2a2a;
+    padding-left: 25px;
+  }
+
+  /* Profile icon stays on the right */
+  .profile-icon-link {
+    position: fixed;
+    right: 20px;
+    top: 12px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .profile-icon-link svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  /* Menu overlay */
+  .menu-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 400px) {
+  .hamburger-btn {
+    left: 15px;
+    width: 26px;
+    height: 22px;
+  }
+
+  .hamburger-line {
+    height: 2.5px;
+  }
+
+  .nav {
+    width: 260px;
+    padding: 70px 15px 15px;
+  }
+
+  .nav-link {
+    padding: 12px 15px;
+    font-size: 15px;
+  }
+
+  .profile-icon-link {
+    right: 15px;
+    width: 38px;
+    height: 38px;
+  }
+
+  .profile-icon-link svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Landscape orientation for mobile */
+@media (max-width: 600px) and (orientation: landscape) {
+  .nav {
+    padding-top: 60px;
+  }
+
+  .nav-link {
+    padding: 10px 20px;
+  }
+}
+
+/* Prevent body scroll when menu is open */
+body.menu-open {
+  overflow: hidden;
+}
