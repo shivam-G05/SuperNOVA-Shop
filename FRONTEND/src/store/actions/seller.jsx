@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:3007/api/seller/dashboard';
+const BASE_URL = 'https://seller-dashboard-tf5t.onrender.com/api/seller/dashboard';
 
 /* ===============================
    Get seller dashboard metrics

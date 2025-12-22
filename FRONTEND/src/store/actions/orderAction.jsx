@@ -1,30 +1,12 @@
-// import axios from 'axios';
 
-// const BASE_URL = 'http://localhost:3003/api/orders';
-
-// // POST - Create a new order
-// export const asynccreateorder = async (shippingAddress) => {
-//     try {
-//         const res = await axios.post(BASE_URL, {
-//             shippingAddress
-//         }, {
-//             withCredentials: true
-//         });
-//         console.log('Order created:', res.data.order);
-//         return res.data.order;
-//     } catch (err) {
-//         console.error('Error creating order:', err);
-//         throw err;
-//     }
-// };
 
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3003/api/orders";
+const BASE_URL = "https://order-9hdz.onrender.com/api/orders";
 
 export const asynccreateorder = async (shippingAddress) => {
   try {
-    const token = localStorage.getItem("token"); // 👈 IMPORTANT
+    const token = localStorage.getItem("token"); 
 
     const res = await axios.post(
       BASE_URL,
@@ -32,7 +14,7 @@ export const asynccreateorder = async (shippingAddress) => {
       {
         withCredentials: true,
         headers: {
-          Authorization: `Bearer ${token}`, // ✅ REQUIRED
+          Authorization: `Bearer ${token}`,
         },
       }
     );

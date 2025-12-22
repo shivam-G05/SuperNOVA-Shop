@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:3000/api/auth';
+const BASE_URL = 'https://supernova-shop.onrender.com/api/auth';
 
-// GET - Fetch user addresses
+
 export const asyncgetaddresses = async () => {
     try {
         const res = await axios.get(`${BASE_URL}/users/me/addresses`, {
@@ -16,13 +16,12 @@ export const asyncgetaddresses = async () => {
     }
 };
 
-// POST - Add new address
-// POST - Add new address
+
 export const asyncaddaddress = async (addressData) => {
     try {
         const res = await axios.post(
-            `http://localhost:3000/api/auth/users/me/addresses`, 
-            addressData,  // ✅ Send directly, not wrapped
+            `https://supernova-shop.onrender.com/api/auth/users/me/addresses`, 
+            addressData,  
             {
                 withCredentials: true
             }
@@ -35,7 +34,7 @@ export const asyncaddaddress = async (addressData) => {
     }
 };
 
-// DELETE - Delete address
+
 export const asyncdeleteaddress = async (addressId) => {
     try {
         const res = await axios.delete(`${BASE_URL}/users/me/addresses/${addressId}`, {
