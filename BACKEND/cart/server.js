@@ -4,6 +4,6 @@ const connectDB=require('./src/db/db');
 
 connectDB();
 
-app.listen(3002,()=>{
+app.listen(process.env.PORT || 3002,()=>{
     console.log("cart service running on 3002 port");
 })

@@ -14,6 +14,6 @@ process.on("unhandledRejection", (reason) => {
 
 
 connectDB();
-app.listen(3001,()=>{
+app.listen(process.env.PORT || 3001,()=>{
     console.log('Product Service is running on port 3001');
 });

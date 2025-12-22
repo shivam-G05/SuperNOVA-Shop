@@ -20,6 +20,6 @@ process.on("unhandledRejection", (reason) => {
   console.error("UNHANDLED PROMISE REJECTION:", reason);
 });
 
-app.listen(3007,()=>{
+app.listen(process.env.PORT || 3007,()=>{
     console.log("Seller-dashboard service is running on port 3007")
 })

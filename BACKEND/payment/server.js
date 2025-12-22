@@ -13,6 +13,6 @@ process.on("unhandledRejection", (reason) => {
   console.error("UNHANDLED REJECTION:", reason);
 });
 
-app.listen(3004, () => {
+app.listen(process.env.PORT || 3004, () => {
     console.log('Payment service is running on port 3004');
 })
