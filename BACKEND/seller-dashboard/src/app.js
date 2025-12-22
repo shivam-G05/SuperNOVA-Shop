@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
 });
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "https://frontend-0npx.onrender.com",
   credentials: true
 }));
 app.use('/api/seller/dashboard',sellerRoutes)

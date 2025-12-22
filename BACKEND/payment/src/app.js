@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "https://frontend-0npx.onrender.com",
   credentials: true
 }));
 
