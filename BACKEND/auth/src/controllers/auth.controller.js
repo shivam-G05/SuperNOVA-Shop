@@ -131,7 +131,7 @@ async function loginUser(req, res) {
             }
         });
     } catch (err) {
-        console.error('Error in loginUser:', err);
+        // console.error('Error in loginUser:', err);
         return res.status(500).json({ message: 'Internal server error' });
     }
 }
@@ -175,18 +175,18 @@ async function getCurrentUser(req,res){
 async function logoutUser(req, res) {
   const token = req.cookies.token;
 
-  if (token) {
-    await redis.set(
-      `blacklist:${token}`,
-      "true",
-      "EX",
-      24 * 60 * 60
-    );
-  }
+//   if (token) {
+//     await redis.set(
+//       `blacklist:${token}`,
+//       "true",
+//       "EX",
+//       24 * 60 * 60
+//     );
+//   }
 
   res.clearCookie("token", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production", // ✅ KEY FIX
+    secure: false,
     sameSite: "lax"
   });
 

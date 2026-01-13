@@ -286,7 +286,7 @@ const SellerDashboard = () => {
                         <h3>Order #{order._id.slice(-8)}</h3>
                         <p className="order-date">{formatDate(order.createdAt)}</p>
                       </div>
-                      <span className={`order-status ${getStatusColor(order.status)}`}>
+                      <span className={`order--status ${getStatusColor(order.status)}`}>
                         {order.status}
                       </span>
                     </div>

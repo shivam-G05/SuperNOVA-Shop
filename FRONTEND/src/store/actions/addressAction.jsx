@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://supernova-shop.onrender.com/api/auth';
+const BASE_URL = 'http://localhost:3000/api/auth';;
 
 
 export const asyncgetaddresses = async () => {
@@ -20,7 +20,7 @@ export const asyncgetaddresses = async () => {
 export const asyncaddaddress = async (addressData) => {
     try {
         const res = await axios.post(
-            `https://supernova-shop.onrender.com/api/auth/users/me/addresses`, 
+            `http://localhost:3000/api/auth/users/me/addresses`, 
             addressData,  
             {
                 withCredentials: true

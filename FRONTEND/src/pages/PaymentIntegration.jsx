@@ -38,7 +38,7 @@ const PaymentIntegration = () => {
       }
 
       const res = await fetch(
-        `https://payment-u8h7.onrender.com/api/payments/create/${orderId}`,
+        `http://localhost:3004/api/payments/create/${orderId}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -88,7 +88,7 @@ const PaymentIntegration = () => {
 
     try {
       const res = await fetch(
-        'https://payment-u8h7.onrender.com/api/payments/verify',
+        'http://localhost:3004/api/payments/verify',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

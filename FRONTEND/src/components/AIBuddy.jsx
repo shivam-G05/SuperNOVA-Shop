@@ -23,7 +23,7 @@ const AIBuddy = () => {
     });
 
     return res.ok;
-  } catch (err) {
+  } catch (error) {
     return false;
   }
 };

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const asyncgetproducts=async()=>{
     try{
-        const res=await axios.get('https://product-acwb.onrender.com/api/products',{
+        const res=await axios.get('http://localhost:3001/api/products',{
             withCredentials:true
         });
         return(res.data.data);
@@ -13,7 +13,7 @@ export const asyncgetproducts=async()=>{
 
 
 
-const BASE_URL = 'https://product-acwb.onrender.com/api';
+const BASE_URL = 'http://localhost:3001/api';
 
 /* ===============================
    Get all seller products

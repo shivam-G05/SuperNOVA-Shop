@@ -2,7 +2,7 @@
 
 import axios from "axios";
 
-const BASE_URL = "https://order-9hdz.onrender.com/api/orders";
+const BASE_URL = "http://localhost:3003/api/orders";
 
 export const asynccreateorder = async (shippingAddress) => {
   try {
