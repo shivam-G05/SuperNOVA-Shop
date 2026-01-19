@@ -18,7 +18,7 @@ const AIBuddy = () => {
   // Check if token exists in cookies
   const checkAuth = async () => {
   try {
-    const res = await fetch("http://localhost:3000/api/auth/me", {
+    const res = await fetch("http://43.205.124.107:3000/api/auth/me", {
       credentials: "include",
     });
 
@@ -39,7 +39,7 @@ const AIBuddy = () => {
 
     console.log('Initializing socket connection...');
     
-    socketRef.current = io("http://localhost:3005", {
+    socketRef.current = io("http://43.205.124.107:3005", {
       withCredentials: true,
       transports: ["websocket", "polling"],
       reconnection: true,

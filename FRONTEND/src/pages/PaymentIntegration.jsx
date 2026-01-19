@@ -38,7 +38,7 @@ const PaymentIntegration = () => {
       }
 
       const res = await fetch(
-        `http://localhost:3004/api/payments/create/${orderId}`,
+        `http://43.205.124.107:3004/api/payments/create/${orderId}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -88,7 +88,7 @@ const PaymentIntegration = () => {
 
     try {
       const res = await fetch(
-        'http://localhost:3004/api/payments/verify',
+        'http://43.205.124.107:3004/api/payments/verify',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

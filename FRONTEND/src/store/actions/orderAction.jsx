@@ -2,7 +2,7 @@
 
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3003/api/orders";
+const BASE_URL = "http://43.205.124.107:3003/api/orders";
 
 export const asynccreateorder = async (shippingAddress) => {
   try {
