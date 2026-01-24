@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const asyncgetusers=async()=>{
     try{
-        const res=await axios.get('http://43.205.124.107:3000/api/auth/me',{
+        const res=await axios.get(`${import.meta.env.VITE_API_URL}/auth/api/auth/me`,{
             withCredentials:true
         });
         
@@ -14,7 +14,7 @@ export const asyncgetusers=async()=>{
 }
 export const asynclogout = async () => {
     try {
-        const res = await axios.post('http://43.205.124.107:3000/api/auth/logout', {}, {
+        const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/api/auth/logout`, {}, {
             withCredentials: true
         });
         // console.log('Logout successful:', res.data.message);

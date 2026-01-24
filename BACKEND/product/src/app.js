@@ -12,7 +12,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
-  origin: "https://frontend-0npx.onrender.com",
+  origin: ["https://frontend-0npx.onrender.com", "https://www.shivamg.me", "https://shivamg.me"],
   credentials: true
 }));
 

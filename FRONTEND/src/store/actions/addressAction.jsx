@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://43.205.124.107:3000/api/auth';;
+const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/auth/api/auth`;
 
 
 export const asyncgetaddresses = async () => {
@@ -20,7 +20,7 @@ export const asyncgetaddresses = async () => {
 export const asyncaddaddress = async (addressData) => {
     try {
         const res = await axios.post(
-            `http://43.205.124.107:3000/api/auth/users/me/addresses`, 
+            `${import.meta.env.VITE_API_BASE_URL}/auth/api/auth/users/me/addresses`, 
             addressData,  
             {
                 withCredentials: true

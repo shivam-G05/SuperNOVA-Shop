@@ -83,7 +83,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://43.205.124.107:3000/api/auth/register", {
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/api/auth/register`, {
         username: formData.username,
         email: formData.email,
         password: formData.password,
