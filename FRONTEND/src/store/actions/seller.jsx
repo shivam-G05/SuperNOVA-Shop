@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/seller-dashboard/api/seller/dashboard`;
+const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/seller/api/seller/dashboard`;
 
 /* ===============================
    Get seller dashboard metrics

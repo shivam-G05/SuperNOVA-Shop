@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const asyncgetproducts=async()=>{
     try{
-        const res=await axios.get(`${import.meta.env.VITE_API_BASE_URL}/product/api/products`,{
+        const res=await axios.get(`${import.meta.env.VITE_API_BASE_URL}/products/api/products`,{
             withCredentials:true
         });
         return(res.data.data);
@@ -13,7 +13,7 @@ export const asyncgetproducts=async()=>{
 
 
 
-const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/product/api`;
+const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/products/api`;
 
 /* ===============================
    Get all seller products

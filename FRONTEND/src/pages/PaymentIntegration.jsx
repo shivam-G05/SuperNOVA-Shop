@@ -86,7 +86,7 @@ const PaymentIntegration = () => {
     setLoading(true);
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/payments/api/payments/verify`,
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/payment/api/payments/verify`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
