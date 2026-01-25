@@ -39,13 +39,14 @@ const AIBuddy = () => {
 
     console.log('Initializing socket connection...');
     
-    socketRef.current = io(`${import.meta.env.VITE_API_BASE_URL}/ai-buddy`, {
+    socketRef.current = io(import.meta.env.VITE_API_BASE_URL, {
       withCredentials: true,
       transports: ["websocket", "polling"],
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionAttempts: 5,
-      forceNew: true
+      forceNew: true,
+      path: '/socket.io/'
     });
 
     socketRef.current.on("connect", () => {
