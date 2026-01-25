@@ -2,7 +2,7 @@
 
 import axios from "axios";
 
-const BASE_URL = `${import.meta.env.VITE_BASE_API_URL}/order/api/orders`;
+const BASE_URL = `https//api.shivamg.me/order/api/orders`;
 
 export const asynccreateorder = async (shippingAddress) => {
   try {
