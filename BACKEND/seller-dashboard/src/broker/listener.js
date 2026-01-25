@@ -19,7 +19,9 @@ module.exports = async function () {
       }
     }
   );
-
+  await subscribeToQueue("PRODUCT_SELLER_DASHBOARD.PRODUCT_DELETED", async (product) => {
+    await productModel.findByIdAndDelete(product._id);
+  });
   await subscribeToQueue(
     "PRODUCT_SELLER_DASHBOARD.PRODUCT_CREATED",
     async (product) => {

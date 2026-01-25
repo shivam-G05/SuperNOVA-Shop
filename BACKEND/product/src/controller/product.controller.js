@@ -139,7 +139,7 @@ async function deleteProduct(req, res) {
     if (!product) {
         return res.status(404).json({ message: 'Product not found' });
     }
-
+    await publishToQueue("PRODUCT_SELLER_DASHBOARD.PRODUCT_DELETED", product);
     if (product.seller.toString() !== req.user.id) {
         return res.status(403).json({ message: 'Forbidden: You can only delete your own products' });
     }
