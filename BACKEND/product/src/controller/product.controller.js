@@ -1,5 +1,4 @@
 const productModel = require('../models/product.model');
-const productModel2=require('../../../seller-dashboard/src/models/product.model');
 const { uploadImage } = require('../services/imagekit.service');
 const { publishToQueue } = require('../broker/broker');
 const mongoose = require('mongoose');
@@ -136,16 +135,10 @@ async function deleteProduct(req, res) {
     const product = await productModel.findOne({
         _id: id,
     });
-    const product2 = await productModel2.findOne({
-        _id: id,
-    });
-
-
 
     if (!product) {
         return res.status(404).json({ message: 'Product not found' });
     }
-    await productModel2.findOneAndDelete({ _id: id });
 
     if (product.seller.toString() !== req.user.id) {
         return res.status(403).json({ message: 'Forbidden: You can only delete your own products' });
@@ -153,9 +146,6 @@ async function deleteProduct(req, res) {
 
     await productModel.findOneAndDelete({ _id: id });
     return res.status(200).json({ message: 'Product deleted' });
-
-    
-    
 }
 
 async function getProductsBySeller(req, res) {
