@@ -1,7 +1,7 @@
 import "./App.css";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
-
+import Footer from "./components/Footer";
 import AIBuddy from "./components/AIBuddy";
 import Header from "./components/Header";
 import SellerDashboard from "./pages/SellerDashboard";
@@ -67,7 +67,7 @@ function App() {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
-
+      <Footer />
       {!shouldHideAIBuddy && <AIBuddy />}
     </AuthProvider>
   );
