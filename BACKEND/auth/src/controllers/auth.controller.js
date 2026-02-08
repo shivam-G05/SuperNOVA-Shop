@@ -64,8 +64,7 @@ async function registerUser(req,res){
     },process.env.JWT_SECRET,{expiresIn:'1d'});
     //SET THAT COOKIE IN TOKEN AND PREVENT SERVER SIDE FROM ACCESSING IT 
     res.cookie('token',token,{
-        httpOnly:true,
-        secure:false,
+        secure:true,
         maxAge: 24*60*60*1000,
     })
     //SENDING SUCCESS RESPONSE ON CREATING USER
@@ -114,7 +113,7 @@ async function loginUser(req, res) {
         }, process.env.JWT_SECRET, { expiresIn: '1d' });
         //set the token in cookie
         res.cookie('token', token, {
-            httpOnly: true,
+            
             secure: true,
             maxAge: 24 * 60 * 60 * 1000,
         });
@@ -185,8 +184,8 @@ async function logoutUser(req, res) {
 //   }
 
   res.clearCookie("token", {
-    httpOnly: true,
-    secure: false,
+    
+    secure: true,
     sameSite: "lax"
   });
 
