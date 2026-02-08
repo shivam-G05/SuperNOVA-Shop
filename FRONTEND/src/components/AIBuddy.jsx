@@ -18,12 +18,12 @@ const AIBuddy = () => {
   // Check if token exists in cookies
   const checkAuth = async () => {
   try {
-    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/api/auth/me`, {
+    const res = await fetch(`http://localhost:3000/api/auth/me`, {
       credentials: "include",
     });
 
     return res.ok;
-  } catch (error) {
+  } catch (err) {
     return false;
   }
 };
@@ -39,7 +39,7 @@ const AIBuddy = () => {
 
     console.log('Initializing socket connection...');
     
-    socketRef.current = io(import.meta.env.VITE_API_BASE_URL, {
+    socketRef.current = io('http://localhost:3005', {
       withCredentials: true,
       transports: ["websocket", "polling"],
       reconnection: true,

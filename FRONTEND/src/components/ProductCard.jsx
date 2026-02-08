@@ -1,58 +1,60 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './ProductCard.css';
 
 const ProductCard = ({ product }) => {
-  const { title, description, price, _id,images } = product;
-  const descRef = useRef();
-  const [isOverflow, setIsOverflow] = useState(false);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const checkOverflow = () => {
-      const el = descRef.current;
-      if (el) {
-        // Check if content is being clamped (overflow due to line-clamp)
-        setIsOverflow(el.scrollHeight > el.clientHeight);
-      }
-    };
+  const handleCardClick = () => {
+    navigate(`/product/${product._id}`);
+  };
 
-    checkOverflow();
-    
-    // Recheck on window resize
-    window.addEventListener('resize', checkOverflow);
-    return () => window.removeEventListener('resize', checkOverflow);
-  }, [description]);
+  const formatPrice = (amount, currency = "INR") => {
+    const symbols = { USD: "$", INR: "₹", EUR: "€" };
+    return `${symbols[currency] || currency} ${amount.toFixed(2)}`;
+  };
+
+  const imageUrl = product.images && product.images.length > 0 
+    ? product.images[0].url 
+    : "/placeholder-image.png";
 
   return (
-    <div className="product-card">
-      <div className="product-image-placeholder">
-        <img
-        src={images?.[0]?.thumbnail || images?.[0]?.url}
-        
-        loading='lazy'/>
-      </div>
-      
-      <div className="product-info">
-        <h3 className="product-title">{title}</h3>
-        <p className="product-description" ref={descRef}>
-          {description}
-        </p>
-        {isOverflow && (
-          <Link to={`/product/${_id}`} className="know-more-link">
-            ...Know More →
-          </Link>
+    <div className="product-card" onClick={handleCardClick}>
+      <div className="product-image">
+        <img src={imageUrl} alt={product.title} />
+        {product.stock <= 5 && product.stock > 0 && (
+          <div className="stock-badge low-stock">Only {product.stock} left!</div>
         )}
+        {product.stock === 0 && (
+          <div className="stock-badge out-of-stock">Out of Stock</div>
+        )}
+      </div>
+
+      <div className="product-info">
+        <h3 className="product-title">{product.title}</h3>
         
+        <p className="product-description">
+          {product.description && product.description.length > 80
+            ? `${product.description.substring(0, 80)}...`
+            : product.description || "No description available"}
+        </p>
+
         <div className="product-footer">
-          <div className="price-section">
-            <span className="currency">{price?.currency || '$'}</span>
-            <span className="amount">{price?.amount || 'N/A'}</span>
+          <div className="product-price">
+            <span className="price-label">Price:</span>
+            <span className="price-amount">
+              {formatPrice(product.price.amount, product.price.currency)}
+            </span>
           </div>
-          <Link to={`/product/${_id}`} className="know-more-link">
-          <button className="buy-button">
-            Buy Now
+
+          <button 
+            className="view-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/product/${product._id}`);
+            }}
+          >
+            View Details
           </button>
-          </Link>
         </div>
       </div>
     </div>

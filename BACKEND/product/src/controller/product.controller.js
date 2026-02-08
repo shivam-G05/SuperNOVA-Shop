@@ -1,11 +1,12 @@
 const productModel = require('../models/product.model');
+
 const { uploadImage } = require('../services/imagekit.service');
 const { publishToQueue } = require('../broker/broker');
 const mongoose = require('mongoose');
 
 async function createProduct(req, res) {
     try {
-        const { title, description, priceAmount, priceCurrency = 'INR', stock = 0 } = req.body;
+        const { title, description, priceAmount, priceCurrency = 'INR', stock = 0, category } = req.body;
         const seller = req.user.id;
 
         if (req.files && req.files.length > 4) {
@@ -27,7 +28,8 @@ async function createProduct(req, res) {
             price,
             seller,
             images,
-            stock: Number(stock) || 0
+            stock: Number(stock) || 0,
+            category
         });
 
         await publishToQueue("PRODUCT_SELLER_DASHBOARD.PRODUCT_CREATED", product);
@@ -35,7 +37,8 @@ async function createProduct(req, res) {
             email: req.user.email,
             productId: product._id,
             sellerId: seller,
-            productName: product.title
+            productName: product.title,
+            
         });
 
         return res.status(201).json({
@@ -157,5 +160,72 @@ async function getProductsBySeller(req, res) {
 
     return res.status(200).json({ data: products });
 }
+async function addReview(req, res) {
+    try{
+        const { id } = req.params;
+    const { rating, comment } = req.body;
+    const userId = req.user.id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: 'Invalid product id' });
+        } 
+    const product=await productModel.findById(id);
+    if(!product){
+        return res.status(404).json({message:"Product not found"});
+    }
+    if (rating < 1 || rating > 5) {
+            return res.status(400).json({ message: "Rating must be between 1 and 5" });
+        }
+    const existingReviewIndex=product.reviews.findIndex(review=>review.user.toString()===userId);
+    if(existingReviewIndex!==-1){
+        product.reviews[existingReviewIndex].rating=rating;
+        product.reviews[existingReviewIndex].comment=comment;
+    }
+    else{
+        product.reviews.push({
+            user:userId,
+            rating,
+            comment
+        });
+    }
+    await product.save();
+    return res.status(200).json({message:"Review added/updated", review: {user:userId, rating, comment} });
 
-module.exports = { createProduct, getProducts, getProductById, updateProduct, deleteProduct, getProductsBySeller };
+    }catch(err){
+        console.error('Error in adding review', err);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+async function getReviewsForProduct(req,res){
+    const {id}=req.params;
+    const product=await productModel.findById(id);
+    if(!product){
+        return res.status(404).json({message:"Product Not Found"});
+    }
+    return res.status(200).json({data:product.reviews});
+
+}
+const searchProducts = async (req, res) => {
+  try {
+    const { q } = req.query; // ?q=shoes
+
+    if (!q) {
+      return res.status(400).json({ message: "Search query required" });
+    }
+
+    const products = await productModel.find(
+      { $text: { $search: q } }, 
+      { score: { $meta: "textScore" } }
+    ).sort({ score: { $meta: "textScore" } }); 
+
+    res.status(200).json({ products });
+
+  } catch (err) {
+    console.log("SEARCH ERROR:", err);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+
+module.exports = { createProduct, getProducts, getProductById, updateProduct, deleteProduct, getProductsBySeller, addReview ,getReviewsForProduct ,searchProducts};

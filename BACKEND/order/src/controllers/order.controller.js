@@ -5,21 +5,20 @@ const { publishToQueue } = require("../broker/broker");
 
 async function createOrder(req, res) {
 
-if (!req.body.shippingAddress) {
-  return res.status(400).json({
-    message: "Shipping address is required",
-  });
-}
+  if (!req.body.shippingAddress) {
+    return res.status(400).json({
+      message: "Shipping address is required",
+    });
+  }
+  console.log("Received shipping address:", req.body.shippingAddress); 
 
 
   const user = req.user;
-  const token =
-    req.cookies?.token ||
-    req.headers?.authorization?.split(" ")[1];
+  const token =req.cookies?.token ||req.headers?.authorization?.split(" ")[1];
 
-    if (!token) {
-  return res.status(401).json({ message: "No auth token" });
-}
+  if (!token) {
+    return res.status(401).json({ message: "No auth token" });
+  }
 
   try {
     const cartResponse = await axios.get(
@@ -99,7 +98,7 @@ if (!req.body.shippingAddress) {
   street: req.body.shippingAddress.street,
   city: req.body.shippingAddress.city,
   state: req.body.shippingAddress.state,
-  pincode: String(req.body.shippingAddress.pincode), // ✅
+  pincode: req.body.shippingAddress.pincode, 
   country: req.body.shippingAddress.country,
 },
 
@@ -112,12 +111,20 @@ if (!req.body.shippingAddress) {
 
     return res.status(201).json({ order });
 
-  } catch (err) {
-  console.error("Order creation failed:", err.message);
+  }catch (err) {
+    // Check if the error came from an internal Axios call (to Cart or Product service)
+    if (err.response) {
+        console.error(`CRITICAL: Internal Service (${err.config.url}) returned ${err.response.status}`);
+        return res.status(err.response.status).json({
+            message: `Internal Service Error: ${err.response.data.message || 'Service unreachable'}`,
+            failedUrl: err.config.url
+        });
+    }
 
-  return res.status(400).json({
-    message: err.message,
-  });
+    console.error("Logic Error:", err.message);
+    return res.status(400).json({
+        message: err.message
+    });
 }
 
 }
@@ -226,7 +233,7 @@ async function updateOrderAddress(req,res){
             street: req.body.shippingAddress.street,
             city: req.body.shippingAddress.city,
             state: req.body.shippingAddress.state,
-            zip: req.body.shippingAddress.pincode,
+            pincode: req.body.shippingAddress.pincode,
             country: req.body.shippingAddress.country,
         }
         await order.save();

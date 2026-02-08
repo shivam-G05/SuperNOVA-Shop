@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const asyncgetproducts=async()=>{
     try{
-        const res=await axios.get(`${import.meta.env.VITE_API_BASE_URL}/products/api/products`,{
+        const res=await axios.get(`http://localhost:3001/api/products`,{
             withCredentials:true
         });
         return(res.data.data);
@@ -13,7 +13,7 @@ export const asyncgetproducts=async()=>{
 
 
 
-const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/products/api`;
+const BASE_URL = `http://localhost:3001/api/products`;
 
 /* ===============================
    Get all seller products
@@ -21,7 +21,7 @@ const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/products/api`;
 export const asyncgetSellerProducts = async () => {
   try {
     const res = await axios.get(
-      `${BASE_URL}/products/seller`,
+      `${BASE_URL}/seller`,
       { withCredentials: true }
     );
     return res.data.data;
@@ -42,13 +42,14 @@ export const asynccreateProduct = async (productData) => {
     formData.append('priceAmount', productData.priceAmount);
     formData.append('priceCurrency', productData.priceCurrency);
     formData.append('stock', productData.stock);
+    formData.append('category', productData.category);
 
     productData.images.forEach((image) => {
       formData.append('images', image);
     });
 
     const res = await axios.post(
-      `${BASE_URL}/products`,
+      `${BASE_URL}`,
       formData,
       {
         withCredentials: true,
@@ -81,7 +82,7 @@ export const asyncupdateProduct = async (productId, productData) => {
     };
 
     const res = await axios.patch(
-      `${BASE_URL}/products/${productId}`,
+      `${BASE_URL}/${productId}`,
       updateData,
       { withCredentials: true }
     );
@@ -99,7 +100,7 @@ export const asyncupdateProduct = async (productId, productData) => {
 export const asyncdeleteProduct = async (productId) => {
   try {
     const res = await axios.delete(
-      `${BASE_URL}/products/${productId}`,
+      `${BASE_URL}/${productId}`,
       { withCredentials: true }
     );
 
@@ -108,3 +109,14 @@ export const asyncdeleteProduct = async (productId) => {
     console.log('Error deleting product:', err);
   }
 };
+export const asyncsearchproducts = async (query) => {
+  try {
+    const res = await axios.get(
+      `http://localhost:3002/api/products/search?q=${query}`
+    );
+    return res.data.products;
+  } catch (err) {
+    console.log(err);
+  }
+};
+

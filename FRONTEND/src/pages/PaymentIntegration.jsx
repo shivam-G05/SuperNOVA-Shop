@@ -37,7 +37,7 @@ const PaymentIntegration = () => {
         return;
       }
 
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/payment/api/payments/create/${orderId}`,
+      const res = await fetch(`http://localhost:3004/api/payments/create/${orderId}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -86,7 +86,7 @@ const PaymentIntegration = () => {
     setLoading(true);
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/payment/api/payments/verify`,
+      const res = await fetch(`http://localhost:3004/api/payments/verify`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

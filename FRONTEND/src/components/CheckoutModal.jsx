@@ -49,26 +49,21 @@ const CheckoutModal = ({ isOpen, onClose, cartTotal }) => {
       alert("Please select a shipping address");
       return;
     }
+    
 
     const address = addresses.find(addr => addr._id === selectedAddress);
     if (!address) return;
-
-    // const shippingAddress = {
-    //   street: address.street,
-    //   city: address.city,
-    //   state: address.state,
-    //   pincode: address.zip || address.pincode,
-    //   country: address.country || "India",
-    // };
+    console.log("Selected address for order:", address);
+    
 
     const shippingAddress = {
-  street: address.street,
-  city: address.city,
-  state: address.state,
-  pincode: String(address.zip || address.pincode), // ✅ force string
-  country: address.country || "India",
-};
-
+      street: address.street,
+      city: address.city,
+      state: address.state,
+      pincode: address.pincode,
+      country: address.country || "India",
+      isDefault: address.isDefault || false,
+    };
 
     try {
       setIsCreatingOrder(true);

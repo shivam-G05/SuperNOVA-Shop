@@ -19,7 +19,7 @@ const Footer = () => {
               </a>
             </div>
           <p>&copy; 2025 SuperNOVA Shop</p>
-          <p className="footer-credit">Powered by @shivamkgjj2005@gmail.com</p>
+          <p className="footer-credit">Powered by @ shivam05dev@gmail.com</p>
         </div>   
 
           

@@ -313,7 +313,7 @@ const OrderDetail = () => {
             <div className="address-display">
               <p>{order.shippingAddress.street}</p>
               <p>{order.shippingAddress.city}, {order.shippingAddress.state}</p>
-              <p>PIN: {order.shippingAddress.zip}</p>
+              <p>PIN: {order.shippingAddress.pincode}</p>
               {order.shippingAddress.country && (
                 <p>{order.shippingAddress.country}</p>
               )}

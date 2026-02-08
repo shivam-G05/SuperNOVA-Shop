@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { asyncgetproducts } from '../store/actions/productsAction';
 import { asyncaddtocart } from '../store/actions/cartAction';
 import { asyncgetcartitems } from '../store/actions/cartAction';
+import { addReview, getReviews } from '../store/actions/reviewsAction';
 
 import './ProductDetail.css';
 
@@ -18,6 +19,19 @@ const ProductDetail = () => {
   const [error, setError] = useState(null);
   const [addingToCart, setAddingToCart] = useState(false);
 
+  // Reviews state
+  const [reviews, setReviews] = useState([]);
+  const [reviewsLoading, setReviewsLoading] = useState(false);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState('');
+  const [submittingReview, setSubmittingReview] = useState(false);
+  const [reviewError, setReviewError] = useState(null);
+
+  // Review carousel state - changed to 1 review per page for better readability
+  const [reviewIndex, setReviewIndex] = useState(0);
+  const reviewsPerPage = 1;
+
   useEffect(() => {
     const fetchProductAndCart = async () => {
       try {
@@ -32,12 +46,10 @@ const ProductDetail = () => {
         if (foundProduct) {
           setProduct(foundProduct);
           
-          // Find current quantity in cart for this product
           const cartItem = cartItems?.find(item => item.productId === id);
           const cartQty = cartItem?.quantity || 0;
           setCurrentCartQuantity(cartQty);
           
-          // Adjust available quantity selector max based on what's already in cart
           const maxAvailable = foundProduct.stock - cartQty;
           if (maxAvailable <= 0) {
             setQuantity(0);
@@ -56,7 +68,54 @@ const ProductDetail = () => {
     };
 
     fetchProductAndCart();
+    fetchReviews();
   }, [id]);
+
+  // Fetch reviews
+  const fetchReviews = async () => {
+    try {
+      setReviewsLoading(true);
+      setReviewError(null);
+      const response = await getReviews(id);
+      setReviews(response.data || []);
+    } catch (err) {
+      console.error('Error fetching reviews:', err);
+      setReviewError('Failed to load reviews');
+    } finally {
+      setReviewsLoading(false);
+    }
+  };
+
+  // Submit review
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    
+    if (!comment.trim()) {
+      setReviewError('Please enter a comment');
+      return;
+    }
+
+    try {
+      setSubmittingReview(true);
+      setReviewError(null);
+      
+      await addReview(id, Number(rating), comment.trim());
+      
+      setComment('');
+      setRating(5);
+      setShowReviewForm(false);
+      
+      await fetchReviews();
+      
+      alert('Review submitted successfully!');
+    } catch (err) {
+      console.error('Error submitting review:', err);
+      setReviewError(err.response?.data?.message || 'Failed to submit review');
+      alert(err.response?.data?.message || 'Failed to submit review. Please make sure you are logged in.');
+    } finally {
+      setSubmittingReview(false);
+    }
+  };
 
   const handleQuantityChange = (type) => {
     const availableStock = (product?.stock || 0) - currentCartQuantity;
@@ -75,7 +134,6 @@ const ProductDetail = () => {
   const addToCart = async () => {
     const availableStock = (product?.stock || 0) - currentCartQuantity;
     
-    // Validate stock before adding
     if (currentCartQuantity >= product.stock) {
       setError(`Cannot add more items. You already have the maximum stock (${product.stock}) in your cart.`);
       return;
@@ -103,6 +161,38 @@ const ProductDetail = () => {
     }
   };
 
+  // Star Rating Component
+  const StarRating = ({ value, onChange, readOnly = false }) => (
+    <div className="star-rating">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <span
+          key={star}
+          className={`star ${star <= value ? 'filled' : ''} ${!readOnly ? 'clickable' : ''}`}
+          onClick={() => !readOnly && onChange && onChange(star)}
+        >
+          ★
+        </span>
+      ))}
+    </div>
+  );
+
+  // Review Carousel Navigation
+  const handleNextReviews = () => {
+    if (reviewIndex + reviewsPerPage < reviews.length) {
+      setReviewIndex(reviewIndex + reviewsPerPage);
+    }
+  };
+
+  const handlePrevReviews = () => {
+    if (reviewIndex > 0) {
+      setReviewIndex(Math.max(0, reviewIndex - reviewsPerPage));
+    }
+  };
+
+  const visibleReviews = reviews.slice(reviewIndex, reviewIndex + reviewsPerPage);
+  const canGoNext = reviewIndex + reviewsPerPage < reviews.length;
+  const canGoPrev = reviewIndex > 0;
+
   if (loading) {
     return (
       <div className="loading-container">
@@ -129,6 +219,10 @@ const ProductDetail = () => {
   const availableStock = product.stock - currentCartQuantity;
   const canAddToCart = availableStock > 0;
 
+  const averageRating = reviews.length > 0
+    ? (reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length).toFixed(1)
+    : 0;
+
   return (
     <div className="product-detail-container">
       <button onClick={() => navigate(-1)} className="back-nav-button">
@@ -136,42 +230,146 @@ const ProductDetail = () => {
       </button>
 
       <div className="product-detail-content">
-        {/* Image Gallery Section */}
-        <div className="image-gallery">
-          <div className="main-image">
-            <div className="image-placeholder">
-              <img
-                src={
-                  product.images?.[selectedImage]?.url ||
-                  product.images?.[selectedImage]?.thumbnail
-                }
-                alt={product.title}
-                className="main-product-image"
-              />
+        {/* LEFT COLUMN - Images and Reviews */}
+        <div className="left-column">
+          {/* Image Gallery Section */}
+          <div className="image-gallery">
+            <div className="main-image">
+              <div className="image-placeholder">
+                <img
+                  src={
+                    product.images?.[selectedImage]?.url ||
+                    product.images?.[selectedImage]?.thumbnail
+                  }
+                  alt={product.title}
+                  className="main-product-image"
+                />
+              </div>
+            </div>
+
+            <div className="thumbnail-gallery">
+              {product.images.map((img, index) => (
+                <div
+                  key={img._id || index}
+                  className={`thumbnail ${selectedImage === index ? 'active' : ''}`}
+                  onClick={() => setSelectedImage(index)}
+                >
+                  <img
+                    src={img.thumbnail || img.url}
+                    alt={`${product.title} ${index + 1}`}
+                    className="thumbnail-image"
+                  />
+                </div>
+              ))}
             </div>
           </div>
 
-          <div className="thumbnail-gallery">
-            {product.images.map((img, index) => (
-              <div
-                key={img._id || index}
-                className={`thumbnail ${selectedImage === index ? 'active' : ''}`}
-                onClick={() => setSelectedImage(index)}
+          {/* Reviews Carousel Section - Below Images */}
+          <div className="reviews-carousel-section">
+            <div className="reviews-carousel-header">
+              <h3>Customer Reviews ({reviews.length})</h3>
+              <button 
+                className="btn-add-review-small"
+                onClick={() => setShowReviewForm(!showReviewForm)}
               >
-                <img
-                  src={img.thumbnail || img.url}
-                  alt={`${product.title} ${index + 1}`}
-                  className="thumbnail-image"
-                />
+                {showReviewForm ? '✕' : '+'}
+              </button>
+            </div>
+
+            {/* Review Form */}
+            {showReviewForm && (
+              <div className="review-form-compact">
+                {reviewError && (
+                  <div className="alert-error">
+                    <p>⚠️ {reviewError}</p>
+                  </div>
+                )}
+
+                <form onSubmit={handleSubmitReview}>
+                  <div className="form-group-compact">
+                    <label>Rating</label>
+                    <StarRating value={rating} onChange={setRating} />
+                  </div>
+
+                  <div className="form-group-compact">
+                    <textarea
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                      placeholder="Share your thoughts..."
+                      rows="4"
+                      required
+                      disabled={submittingReview}
+                    />
+                  </div>
+
+                  <button type="submit" disabled={submittingReview} className="submit-btn-compact">
+                    {submittingReview ? 'Submitting...' : 'Submit Review'}
+                  </button>
+                </form>
               </div>
-            ))}
+            )}
+
+            {/* Reviews Carousel */}
+            {reviewsLoading ? (
+              <div className="reviews-loading-compact">
+                <div className="spinner-small"></div>
+                <p>Loading reviews...</p>
+              </div>
+            ) : reviews.length === 0 ? (
+              <div className="no-reviews-compact">
+                <p>No reviews yet. Be the first to review!</p>
+              </div>
+            ) : (
+              <>
+                <div className="reviews-grid">
+                  {visibleReviews.map((review) => (
+                    <div key={review._id} className="review-card-compact">
+                      <div className="review-card-header">
+                        <StarRating value={review.rating} readOnly />
+                        <span className="review-date-compact">
+                          {new Date(review.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <p className="review-comment-compact">{review.comment}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Carousel Navigation Arrows */}
+                {reviews.length > reviewsPerPage && (
+                  <div className="carousel-controls">
+                    <button
+                      className="arrow-btn"
+                      onClick={handlePrevReviews}
+                      disabled={!canGoPrev}
+                      aria-label="Previous review"
+                    >
+                      ‹
+                    </button>
+                    <span className="carousel-indicator">
+                      {reviewIndex + 1} / {reviews.length}
+                    </span>
+                    <button
+                      className="arrow-btn"
+                      onClick={handleNextReviews}
+                      disabled={!canGoNext}
+                      aria-label="Next review"
+                    >
+                      ›
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
 
-        {/* Product Info Section */}
+        {/* RIGHT COLUMN - Product Info */}
         <div className="product-info-section">
           <div className="product-header">
             <h1 className="product-detail-title">{product.title}</h1>
+            <p className="product-category">Category:<span>{product.category}</span></p>
+
             
             <div className="stock-badge-container">
               <span className={`stock-badge ${isInStock ? 'in-stock' : 'out-of-stock'}`}>
@@ -181,6 +379,15 @@ const ProductDetail = () => {
                 <span className="stock-count">({product.stock} total available)</span>
               )}
             </div>
+
+            {reviews.length > 0 && (
+              <div className="rating-summary">
+                <StarRating value={Math.round(averageRating)} readOnly />
+                <span className="rating-text">
+                  {averageRating} ({reviews.length} {reviews.length === 1 ? 'review' : 'reviews'})
+                </span>
+              </div>
+            )}
           </div>
 
           <div className="price-container">
@@ -191,48 +398,31 @@ const ProductDetail = () => {
           <div className="divider"></div>
 
           <div className="description-section">
-            <h3 className="section-title">Description</h3>
+            <h3 className="section-titles">Description</h3>
             <p className="product-full-description">{product.description}</p>
           </div>
 
           <div className="divider"></div>
 
-          {/* Cart Status Alert */}
           {currentCartQuantity > 0 && (
-            <div style={{
-              padding: '12px',
-              backgroundColor: '#e3f2fd',
-              borderLeft: '4px solid #2196f3',
-              borderRadius: '4px',
-              marginBottom: '1rem'
-            }}>
-              <p style={{ margin: 0, fontSize: '0.9rem', color: '#1976d2' }}>
+            <div className="alert-info">
+              <p>
                 ℹ️ You already have {currentCartQuantity} {currentCartQuantity === 1 ? 'item' : 'items'} in your cart
               </p>
             </div>
           )}
 
-          {/* Error Message */}
           {error && (
-            <div style={{
-              padding: '12px',
-              backgroundColor: '#ffebee',
-              borderLeft: '4px solid #f44336',
-              borderRadius: '4px',
-              marginBottom: '1rem'
-            }}>
-              <p style={{ margin: 0, fontSize: '0.9rem', color: '#c62828' }}>
-                ⚠️ {error}
-              </p>
+            <div className="alert-error">
+              <p>⚠️ {error}</p>
             </div>
           )}
 
-          {/* Quantity Selector */}
           {isInStock && canAddToCart && (
             <div className="quantity-section">
               <h3 className="section-title">
                 Quantity {availableStock < product.stock && (
-                  <span style={{ fontSize: '0.85rem', color: '#666', fontWeight: 'normal' }}>
+                  <span className="stock-remaining">
                     ({availableStock} remaining)
                   </span>
                 )}
@@ -257,22 +447,14 @@ const ProductDetail = () => {
             </div>
           )}
 
-          {/* Max Stock Warning */}
           {isInStock && !canAddToCart && (
-            <div style={{
-              padding: '12px',
-              backgroundColor: '#fff3e0',
-              borderLeft: '4px solid #ff9800',
-              borderRadius: '4px',
-              marginBottom: '1rem'
-            }}>
-              <p style={{ margin: 0, fontSize: '0.9rem', color: '#e65100' }}>
+            <div className="alert-warning">
+              <p>
                 You have reached the maximum available stock for this item in your cart.
               </p>
             </div>
           )}
 
-          {/* Action Buttons */}
           <div className="action-buttons">
             <button 
               className="add-to-cart-btn" 
@@ -295,17 +477,16 @@ const ProductDetail = () => {
             </button>
           </div>
 
-          {/* Additional Info */}
           <div className="additional-info">
-            <div className="info-item">
+            <div className="info-items">
               <span className="info-icon">🚚</span>
               <span className="info-text">Free shipping on orders over INR500</span>
             </div>
-            <div className="info-item">
+            <div className="info-items">
               <span className="info-icon">↩️</span>
               <span className="info-text">30-day return policy</span>
             </div>
-            <div className="info-item">
+            <div className="info-items">
               <span className="info-icon">🔒</span>
               <span className="info-text">Secure payment</span>
             </div>

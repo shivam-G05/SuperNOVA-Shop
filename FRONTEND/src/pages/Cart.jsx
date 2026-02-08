@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import {
   asyncgetcartitems,
   asyncupdatecartitems,
+  asyncdeletecartitem,
 } from "../store/actions/cartAction";
 import { asyncgetproducts } from "../store/actions/productsAction";
 import CheckoutModal from "../components/CheckoutModal";
@@ -59,7 +60,14 @@ const Cart = () => {
   };
 
   const updateQuantity = async (itemId, productId, newQuantity, stock) => {
-    if (newQuantity < 1 || newQuantity > stock) return;
+    
+    const currentItem = cartItems.find((item) => item._id === itemId);
+    const currentQty = currentItem?.quantity || 0;
+
+    
+    if (newQuantity < 1) return; 
+
+    if (newQuantity > currentQty && newQuantity > stock) return;
 
     try {
       setUpdatingItems((prev) => ({ ...prev, [itemId]: true }));
@@ -80,6 +88,24 @@ const Cart = () => {
       setUpdatingItems((prev) => ({ ...prev, [itemId]: false }));
     }
   };
+const removeItem = async (itemId, productId) => {
+  try {
+    setUpdatingItems((prev) => ({ ...prev, [itemId]: true }));
+
+    await asyncdeletecartitem(productId); // ✅ send productId
+
+    setCartItems((prev) => prev.filter((item) => item._id !== itemId));
+  } catch (err) {
+    console.error("Error removing item:", err);
+    setError("Failed to remove item.");
+  } finally {
+    setUpdatingItems((prev) => {
+      const newState = { ...prev };
+      delete newState[itemId];
+      return newState;
+    });
+  }
+};
 
   const handleIncrement = (item) => {
     const stock = item.product?.stock || 0;
@@ -89,11 +115,15 @@ const Cart = () => {
   };
 
   const handleDecrement = (item) => {
-    const stock = item.product?.stock || 0;
-    if (item.quantity > 1) {
-      updateQuantity(item._id, item.productId, item.quantity - 1, stock);
-    }
-  };
+  const stock = item.product?.stock || 0;
+
+  if (item.quantity === 1) {
+    removeItem(item._id, item.productId); // ✅ PASS productId
+  } else {
+    updateQuantity(item._id, item.productId, item.quantity - 1, stock);
+  }
+};
+
 
   const calculateCartTotal = () => {
     return cartItems.reduce((total, item) => {
@@ -187,12 +217,13 @@ const Cart = () => {
 
                   <div className="quantity-controls">
                     <button
-                      className="qty-btn"
-                      onClick={() => handleDecrement(item)}
-                      disabled={quantity <= 1 || isUpdating}
-                    >
-                      −
-                    </button>
+  className="qty-btn"
+  onClick={() => handleDecrement(item)}
+  // This is correct for limiting to 1, but make sure `isUpdating` isn't stuck
+  disabled={isUpdating}
+>
+  −
+</button>
 
                     <span className="quantity-display">{quantity}</span>
 

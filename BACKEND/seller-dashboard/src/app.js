@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
 });
 
 app.use(cors({
-  origin: ["https://frontend-0npx.onrender.com", "https://www.shivamg.me", "https://shivamg.me"],
+  origin: "http://localhost:5173",
   credentials: true
 }));
 app.use('/api/seller/dashboard',sellerRoutes)

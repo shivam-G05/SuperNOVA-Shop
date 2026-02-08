@@ -24,6 +24,7 @@ const SellProducts = () => {
     priceAmount: '',
     priceCurrency: 'INR',
     stock: '0',
+    category: '',
     images: []
   });
 
@@ -80,7 +81,7 @@ const SellProducts = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.title || !formData.description || !formData.priceAmount) {
+    if (!formData.title || !formData.description || !formData.priceAmount || (!editingProduct&&!formData.category)) {
       alert('Please fill in all required fields');
       return;
     }
@@ -89,6 +90,23 @@ const SellProducts = () => {
       alert('Stock cannot be negative');
       return;
     }
+    if(formData.images.length>4){
+      alert('You can upload a maximum of 4 images only');
+      return;
+    }
+    if(formData.images.length===0 && !editingProduct){
+      alert('Please upload at least one image');
+      return;
+    } 
+    if(formData.images.length>0 && editingProduct){
+      alert('Image updates are not supported in edit mode. To change images, please delete and recreate the product.');
+      return;
+    } 
+    if(formData.priceAmount <= 0){
+      alert('Price must be greater than zero');
+      return;
+    }
+
 
     setIsSubmitting(true);
 
@@ -159,6 +177,7 @@ const SellProducts = () => {
       priceAmount: '',
       priceCurrency: 'INR',
       stock: '0',
+      category: '',
       images: []
     });
     setImagePreview([]);
@@ -337,6 +356,31 @@ const SellProducts = () => {
                   required
                 />
               </div>
+              
+              {!editingProduct && (
+  <div className="form-group">
+    <label htmlFor="category">Category *</label>
+    <select
+      id="category"
+      name="category"
+      value={formData.category}
+      onChange={handleInputChange}
+      required
+    >
+      <option value="">Select Category</option>
+      <option value="Electronics">Electronics</option>
+      <option value="Fashion">Fashion</option>
+      <option value="Home">Home & Kitchen</option>
+      <option value="Books">Books</option>
+      <option value="Beauty">Beauty</option>
+      <option value="Sports">Sports</option>
+      <option value="Toys">Toys</option>
+      <option value="Grocery">Grocery</option>
+    </select>
+  </div>
+)}
+
+
 
               <div className="form-row">
                 <div className="form-group">

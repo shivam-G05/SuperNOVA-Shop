@@ -13,4 +13,7 @@ router.post('/items',validation.validateAddItemToCart,createAuthMiddleware(["use
 //PAST-api/cart/items
 router.patch('/items/:productId',validation.validateUpdateCartItem,createAuthMiddleware(["user","seller"]),cartController.updateItemQuantity);
 
+//DELETE-api/cart/items
+router.delete('/items/:productId',createAuthMiddleware(["user","seller"]),cartController.removeItemFromCart);
+
 module.exports=router;

@@ -22,7 +22,7 @@ const Profile = () => {
     street: "",
     city: "",
     state: "",
-    zip: "",
+    pincode: "",
     country: "",
     isDefault: false,
   });
@@ -63,7 +63,7 @@ const Profile = () => {
   const handleAddAddress = async (e) => {
     e.preventDefault();
     
-    if (!formData.street || !formData.city || !formData.state || !formData.zip ||!formData.country) {
+    if (!formData.street || !formData.city || !formData.state || !formData.pincode ||!formData.country) {
       alert("Please fill in all required fields");
       return;
     }
@@ -88,7 +88,7 @@ const Profile = () => {
         street: "",
         city: "",
         state: "",
-        zip: "",
+        pincode: "",
         country: "",
         isDefault: false,
       });
@@ -300,11 +300,11 @@ const Profile = () => {
                   </div>
                   <div className="form-row">
                     <div className="form-group">
-                      <label>PIN Code *</label>
+                      <label>PINCODE*</label>
                       <input
                         type="text"
-                        name="zip"
-                        value={formData.zip}
+                        name="pincode"
+                        value={formData.pincode}
                         onChange={handleInputChange}
                         placeholder="Enter ZIP code"
                         required
@@ -378,7 +378,7 @@ const Profile = () => {
                       <p className="address-city">
                         {address.city}, {address.state}
                       </p>
-                      <p className="address-zip">PIN: {address.zip || address.pincode}</p>
+                      <p className="address-zip">PINCODE: {address.pincode}</p>
                       {address.country && (
                         <p className="address-country">{address.country}</p>
                       )}

@@ -65,7 +65,7 @@ async function registerUser(req,res){
     //SET THAT COOKIE IN TOKEN AND PREVENT SERVER SIDE FROM ACCESSING IT 
     res.cookie('token',token,{
         httpOnly:true,
-        secure:true,
+        secure:false,
         maxAge: 24*60*60*1000,
     })
     //SENDING SUCCESS RESPONSE ON CREATING USER
@@ -248,7 +248,8 @@ async function getUserAddresses(req,res){
 
 async function addUserAddress(req, res) {
     const userId = req.user.id;
-    const { street, city, state, zip, country, isDefault } = req.body;
+    const { street, city, state, pincode, country, isDefault } = req.body;
+    
 
     const user = await userModel.findById(userId);
 
@@ -268,7 +269,7 @@ async function addUserAddress(req, res) {
         street,
         city,
         state,
-        zip,
+        pincode,
         country,
         isDefault: !!isDefault,
     });

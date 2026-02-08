@@ -6,7 +6,7 @@ const agent=require('../agent/agent');
 async function initSocketServer(httpServer){
     const io=new Server(httpServer,{
         cors: {
-    origin: "https://frontend-0npx.onrender.com", 
+    origin: "http://localhost:5137", 
     credentials: true
   }
         

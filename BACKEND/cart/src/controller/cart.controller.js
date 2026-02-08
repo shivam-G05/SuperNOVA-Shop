@@ -64,6 +64,22 @@ async function updateItemQuantity(req,res){
 
 };
 
+async function removeItemFromCart(req,res){
+    const{productId}=req.params;
+    const user=req.user;
+    const cart=await cartModel.findOne({user:user.id});
+    if(!cart){
+        return res.status(404).json({
+            message:"Cart not found"
+        })
+    };
+    const existingItemIndex=cart.items.findIndex((item)=>item.productId.toString()===productId);    
+    if(existingItemIndex<0){
+        return res.status(404).json({message:"Cart not found"})
+    };
+    cart.items.splice(existingItemIndex,1);
+    await cart.save();
+    return res.status(200).json({message:"Item removed",cart});
+}
 
-
-module.exports={addItemToCart,updateItemQuantity,getCart}
+module.exports={addItemToCart,updateItemQuantity,getCart,removeItemFromCart};

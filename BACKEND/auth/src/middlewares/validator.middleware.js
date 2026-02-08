@@ -76,11 +76,11 @@ const addUserAddressValidations = [
         .withMessage('State must be a string')
         .notEmpty()
         .withMessage('State is required'),
-    body('zip')
+    body('pincode')
         .isString()
-        .withMessage('Zip Code must be a string')
+        .withMessage('Pin Code must be a string')
         .notEmpty()
-        .withMessage('Zip code is required')
+        .withMessage('Pin code is required')
         .bail()
         .matches(/^\d{4,}$/)
         .withMessage('Zip code must be at least 4 digits'),

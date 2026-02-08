@@ -1,34 +1,26 @@
+import axios from 'axios';
 
+const BASE_URL = 'http://localhost:3003/api/orders';
 
-import axios from "axios";
-
-const BASE_URL = `https://api.shivamg.me/order/api/orders`;
-
+// POST - Create a new order
 export const asynccreateorder = async (shippingAddress) => {
-  try {
-    const token = localStorage.getItem("token"); 
+    try {
+        console.log('Creating order with address:', shippingAddress);
+        
+        const res = await axios.post(`${BASE_URL}`,{shippingAddress},{
+            withCredentials: true
 
-    const res = await axios.post(
-      BASE_URL,
-      { shippingAddress },
-      {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+        }
 
-    return res.data.order;
-  } catch (err) {
-    console.error(
-      "Error creating order:",
-      err.response?.data || err.message
     );
-    throw err;
-  }
+        
+        console.log('Order created:', res.data.order);
+        return res.data.order;
+    } catch (err) {
+        console.error('Error creating order:', err.response?.data || err.message);
+        throw err;
+    }
 };
-
 
 // GET - Get all my orders with pagination
 export const asyncgetmyorders = async (page = 1, limit = 10) => {

@@ -35,4 +35,8 @@ router.patch('/:id',createAuthMiddleware(["seller"]),productController.updatePro
 //DELETE-/api/products/:id
 router.delete('/:id',createAuthMiddleware(["seller"]),productController.deleteProduct)
 
+//POST-reviews
+router.post('/:id/reviews',createAuthMiddleware(["user","seller"]),productController.addReview);
+router.get('/:id/reviews',productController.getReviewsForProduct);
+router.get('/search',productController.searchProducts);
 module.exports = router;
