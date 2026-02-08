@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "http://localhost:3001/api/products";
+const BASE_URL = "https://supernova-shop-product.onrender.com/api/products";
 
 export const addReview=async(productId,rating,comment)=>{
     try{

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = `http://localhost:3000/api/auth`;
+const BASE_URL = `https://supernova-shop-auth.onrender.com/api/auth`;
 
 
 export const asyncgetaddresses = async () => {

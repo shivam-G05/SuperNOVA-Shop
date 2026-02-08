@@ -4,7 +4,7 @@ const axios=require('axios');
 
 const searchProduct = tool(async({ query, token }) => {
     console.log("search product called with data:", { query, token });
-    const response = await axios.get(`http://localhost:3001/api/products?q=${query}`, {
+    const response = await axios.get(`https://supernova-shop-product.onrender.com/api/products?q=${query}`, {
         headers: {
             Authorization: `Bearer ${token}`
         }
@@ -22,7 +22,7 @@ const searchProduct = tool(async({ query, token }) => {
 const addProductToCart = tool(async ({ productId, qty = 1, token }) => {
 
 
-    const response = await axios.post(`https://localhost:3002/api/cart/items`, {
+    const response = await axios.post(`https://supernova-shop-cart.onrender.com/api/cart/items`, {
         productId,
         qty
     }, {
