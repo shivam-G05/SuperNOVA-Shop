@@ -18,7 +18,7 @@ const AIBuddy = () => {
   // Check if token exists in cookies
   const checkAuth = async () => {
   try {
-    const res = await fetch(`https://supernova-shop-auth.onrender.com/api/auth/me`, {
+    const res = await fetch(`http://3.238.239.123:3000/api/auth/me`, {
       credentials: "include",
     });
 
@@ -39,7 +39,7 @@ const AIBuddy = () => {
 
     console.log('Initializing socket connection...');
     
-    socketRef.current = io('https://supernova-shop-ai-buddy.onrender.com', {
+    socketRef.current = io('http://3.238.239.123:3005', {
       withCredentials: true,
       transports: ["websocket", "polling"],
       reconnection: true,

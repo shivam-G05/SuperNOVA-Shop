@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = `https://supernova-shop-auth.onrender.com/api/auth`;
+const BASE_URL = `http://3.238.239.123:3000/api/auth`;
 
 
 export const asyncgetaddresses = async () => {

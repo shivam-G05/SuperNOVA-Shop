@@ -22,7 +22,7 @@ async function createOrder(req, res) {
 
   try {
     const cartResponse = await axios.get(
-      `https://supernova-shop-cart.onrender.com/api/cart`,
+      `http://3.238.239.123:3002/api/cart`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -34,7 +34,7 @@ async function createOrder(req, res) {
       cartResponse.data.cart.items.map(async (item) => {
         return (
           await axios.get(
-            `https://supernova-shop-product.onrender.com/api/products/${item.productId}`,
+            `http://3.238.239.123:3001/api/products/${item.productId}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,

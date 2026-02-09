@@ -16,7 +16,7 @@ async function createPayment(req, res) {
 
         const orderId = req.params.orderId;
 
-        const orderResponse = await axios.get("https://supernova-shop-order.onrender.com/api/orders/" + orderId, {
+        const orderResponse = await axios.get("http://3.238.239.123:3003/api/orders/" + orderId, {
             headers: {
                 Authorization: `Bearer ${token}`
             }

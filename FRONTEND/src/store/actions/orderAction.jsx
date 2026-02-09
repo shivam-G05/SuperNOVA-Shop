@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://supernova-shop-order.onrender.com';
+const BASE_URL = 'http://3.238.239.123:3003';
 
 // POST - Create a new order
 export const asynccreateorder = async (shippingAddress) => {

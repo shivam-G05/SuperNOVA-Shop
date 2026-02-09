@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const asyncaddtocart=async(product_id,product_qty)=>{
     try{
-        const res=await axios.post(`https://supernova-shop-cart.onrender.com/api/cart/items`,{
+        const res=await axios.post(`http://3.238.239.123:3002/api/cart/items`,{
             productId:product_id,
             qty:product_qty,
             
@@ -17,7 +17,7 @@ export const asyncaddtocart=async(product_id,product_qty)=>{
 
 export const asyncgetcartitems=async()=>{
     try{
-        const res=await axios.get(`https://supernova-shop-cart.onrender.com/api/cart`,{
+        const res=await axios.get(`http://3.238.239.123:3002/api/cart`,{
             withCredentials:true
         });
         return(res.data.cart.items);
@@ -28,7 +28,7 @@ export const asyncgetcartitems=async()=>{
 
 export const asyncupdatecartitems=async(product_id,product_quantity)=>{
     try{
-        const res=await axios.patch( `https://supernova-shop-cart.onrender.com/api/cart/items/${product_id}`,{
+        const res=await axios.patch( `http://3.238.239.123:3002/api/cart/items/${product_id}`,{
             qty:product_quantity
         },{
             withCredentials:true
@@ -42,7 +42,7 @@ export const asyncupdatecartitems=async(product_id,product_quantity)=>{
 
 export const asyncdeletecartitem=async(product_id)=>{
     try{
-        const res=await axios.delete(`https://supernova-shop-cart.onrender.com/api/cart/items/${product_id}`,{
+        const res=await axios.delete(`http://3.238.239.123:3002/api/cart/items/${product_id}`,{
             withCredentials:true
 
         });
