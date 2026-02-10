@@ -16,7 +16,7 @@ async function createPayment(req, res) {
 
         const orderId = req.params.orderId;
 
-        const orderResponse = await axios.get("http://3.238.239.123:3003/api/orders/" + orderId, {
+        const orderResponse = await axios.get("https://api.shivamg.me/api/orders/" + orderId, {
             headers: {
                 Authorization: `Bearer ${token}`
             }

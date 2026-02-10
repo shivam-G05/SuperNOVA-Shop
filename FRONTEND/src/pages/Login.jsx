@@ -60,7 +60,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const res = await fetch(`http://3.238.239.123:3000/api/auth/login`, {
+      const res = await fetch(`https://api.shivamg.me/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

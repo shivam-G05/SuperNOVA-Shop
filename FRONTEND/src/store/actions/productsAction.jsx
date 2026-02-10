@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const asyncgetproducts=async()=>{
     try{
-        const res=await axios.get(`http://3.238.239.123:3001/api/products`,{
+        const res=await axios.get(`https://api.shivamg.me/api/products`,{
             withCredentials:true
         });
         return(res.data.data);
@@ -13,7 +13,7 @@ export const asyncgetproducts=async()=>{
 
 
 
-const BASE_URL = `http://3.238.239.123:3001/api/products`;
+const BASE_URL = `https://api.shivamg.me/api/products`;
 
 /* ===============================
    Get all seller products
@@ -112,7 +112,7 @@ export const asyncdeleteProduct = async (productId) => {
 export const asyncsearchproducts = async (query) => {
   try {
     const res = await axios.get(
-      `http://3.238.239.123:3001/api/products/search?q=${query}`
+      `https://api.shivamg.me/api/products/search?q=${query}`
     );
     return res.data.products;
   } catch (err) {

@@ -4,7 +4,7 @@ const axios=require('axios');
 
 const searchProduct = tool(async({ query, token }) => {
     console.log("search product called with data:", { query, token });
-    const response = await axios.get(`http://3.238.239.123:3001/api/products?q=${query}`, {
+    const response = await axios.get(`https://api.shivamg.me/api/products?q=${query}`, {
         headers: {
             Authorization: `Bearer ${token}`
         }
@@ -22,7 +22,7 @@ const searchProduct = tool(async({ query, token }) => {
 const addProductToCart = tool(async ({ productId, qty = 1, token }) => {
 
 
-    const response = await axios.post(`http://3.238.239.123:3002/api/cart/items`, {
+    const response = await axios.post(`https://api.shivamg.me/api/cart/items`, {
         productId,
         qty
     }, {

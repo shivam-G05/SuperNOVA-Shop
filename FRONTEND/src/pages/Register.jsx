@@ -83,7 +83,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(`http://3.238.239.123:3000/api/auth/register`, {
+      const response = await axios.post(`https://api.shivamg.me/api/auth/register`, {
         username: formData.username,
         email: formData.email,
         password: formData.password,

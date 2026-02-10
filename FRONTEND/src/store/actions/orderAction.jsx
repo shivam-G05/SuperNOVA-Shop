@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://3.238.239.123:3003';
+const BASE_URL = 'https://api.shivamg.me/api/orders';
 
 // POST - Create a new order
 export const asynccreateorder = async (shippingAddress) => {

@@ -22,7 +22,7 @@ async function createOrder(req, res) {
 
   try {
     const cartResponse = await axios.get(
-      `http://3.238.239.123:3002/api/cart`,
+      `https://api.shivamg.me/api/cart`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -34,7 +34,7 @@ async function createOrder(req, res) {
       cartResponse.data.cart.items.map(async (item) => {
         return (
           await axios.get(
-            `http://3.238.239.123:3001/api/products/${item.productId}`,
+            `https://api.shivamg.me/api/products/${item.productId}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const asyncgetusers=async()=>{
     try{
-        const res=await axios.get(`http://3.238.239.123:3000/api/auth/me`,{
+        const res=await axios.get(`https://api.shivamg.me/api/auth/me`,{
             withCredentials:true
         });
         
@@ -14,7 +14,7 @@ export const asyncgetusers=async()=>{
 }
 export const asynclogout = async () => {
     try {
-        const res = await axios.post(`http://3.238.239.123:3000/api/auth/logout`, {}, {
+        const res = await axios.post(`https://api.shivamg.me/api/auth/logout`, {}, {
             withCredentials: true
         });
         // console.log('Logout successful:', res.data.message);

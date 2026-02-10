@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = `http://3.238.239.123:3007/api/seller/dashboard`;
+const BASE_URL = `https://api.shivamg.me/api/seller/dashboard`;
 
 /* ===============================
    Get seller dashboard metrics

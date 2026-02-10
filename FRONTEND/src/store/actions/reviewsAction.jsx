@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "http://3.238.239.123:3001/api/products";
+const BASE_URL = "https://api.shivamg.me/api/products";
 
 export const addReview=async(productId,rating,comment)=>{
     try{
