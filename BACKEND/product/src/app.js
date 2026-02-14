@@ -9,7 +9,8 @@ app.use(cors({
     "https://supernova-shop-frontend.onrender.com",
     "https://shivamg.me",
     "https://www.shivamg.me",
-    "https://api.shivamg.me",
+    "https://api.shivamg.me"
+    
   ],  credentials: true
 }));
 
