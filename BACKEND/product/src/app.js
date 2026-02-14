@@ -3,14 +3,7 @@ const express=require('express');
 const cookieParser=require('cookie-parser');
 const cors=require('cors');
 const productRoutes=require('./routes/product.route');
-
-
-
 const app=express();
-app.use(express.json());
-app.use(cookieParser());
-app.use(express.urlencoded({ extended: true }));
-
 app.use(cors({
   origin: [
     "https://supernova-shop-frontend.onrender.com",
@@ -18,6 +11,13 @@ app.use(cors({
     "https://www.shivamg.me"
   ],  credentials: true
 }));
+
+
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
+
+
 
 
 app.get('/', (req, res) => {
