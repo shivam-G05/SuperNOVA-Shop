@@ -6,7 +6,7 @@ const agent=require('../agent/agent');
 async function initSocketServer(httpServer){
     const io=new Server(httpServer,{
         cors: {
-    origin:  "https://supernova-4suf.onrender.com",
+    origin:  "https://shop.shivamg.me",
     credentials: true
   }
         

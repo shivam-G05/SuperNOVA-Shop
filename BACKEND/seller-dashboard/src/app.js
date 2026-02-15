@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
 });
 
 app.use(cors({
-  origin: "https://supernova-4suf.onrender.com"
+  origin: "https://shop.shivamg.me"
   ,  credentials: true
 }));
 app.use('/api/seller/dashboard',sellerRoutes)

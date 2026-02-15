@@ -4,6 +4,7 @@ const jwt=require('jsonwebtoken');
 const redis=require('../db/redis');
 const {publishToQueue}=require('../broker/broker');
 const { path } = require('../app');
+
 async function registerUser(req,res){
     try{
 
@@ -67,9 +68,10 @@ async function registerUser(req,res){
     res.cookie('token',token,{
         httpOnly:true,
         secure:true,
-        sameSite:'none',
+        sameSite:'lax',
         maxAge: 24*60*60*1000,
-        path:'/'
+        path:'/',
+        domain: 'shivamg.me'
     })
     //SENDING SUCCESS RESPONSE ON CREATING USER
     res.status(201).json({
@@ -119,9 +121,10 @@ async function loginUser(req, res) {
         res.cookie('token',token,{
         httpOnly:true,
         secure:true,
-        sameSite:'none',
+        sameSite:'lax',
         maxAge: 24*60*60*1000,
-        path:'/'
+        path:'/',
+        domain: 'shivamg.me'
         
     })
         //if user logged in successfully

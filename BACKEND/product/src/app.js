@@ -5,7 +5,7 @@ const cors=require('cors');
 const productRoutes=require('./routes/product.route');
 const app=express();
 app.use(cors({
-  origin: "https://supernova-4suf.onrender.com"
+  origin: "https://shop.shivamg.me"
   ,  credentials: true
 }));
 

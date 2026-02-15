@@ -7,7 +7,7 @@ const app=express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: "https://supernova-4suf.onrender.com"
+  origin: "https://shop.shivamg.me"
   ,  credentials: true
 }));
 
