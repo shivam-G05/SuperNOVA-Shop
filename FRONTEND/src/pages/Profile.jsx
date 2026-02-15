@@ -138,13 +138,16 @@ const Profile = () => {
   }
 };
 
-  if (loading) {
-    return (
-      <div className="profile-container">
-        <div className="loading-spinner">Loading profile...</div>
+ if (loading) {
+  return (
+    <div className="profile-container">
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading profile...</p>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   if (error) {
     return (

@@ -49,12 +49,26 @@ function Home() {
   useEffect(() => {
     filterProducts();
   }, [searchQuery, selectedCategory, products]);
-  useEffect(() => {
-  const close = e => !e.target.closest('.search-section') && setShowFilters(false);
-  document.addEventListener('click', close);
-  return () => document.removeEventListener('click', close);
-}, []);
 
+  // Close filter popup when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      // Only close if clicking outside the entire search section
+      const searchSection = document.querySelector('.search-section');
+      if (searchSection && !searchSection.contains(e.target)) {
+        setShowFilters(false);
+      }
+    };
+
+    // Only add listener when filters are shown
+    if (showFilters) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showFilters]);
 
   // Welcome text animation
   useEffect(() => {
@@ -117,11 +131,18 @@ function Home() {
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
+    setShowFilters(false); // Close popup after selecting
   };
 
   const handleClearAllFilters = () => {
     setSearchQuery('');
     setSelectedCategory('All');
+    setShowFilters(false);
+  };
+
+  const toggleFilters = (e) => {
+    e.stopPropagation(); // Prevent event bubbling
+    setShowFilters(!showFilters);
   };
 
   return (
@@ -134,68 +155,62 @@ function Home() {
       </div>
 
       {/* Search Bar */}
-<div className="search-section">
-  <div className="search-bar">
-    <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.35-4.35" />
-    </svg>
+      <div className="search-section">
+        <div className="search-bar">
+          <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
 
-    <input
-      type="text"
-      placeholder="Search products..."
-      value={searchQuery}
-      onChange={handleSearchChange}
-      className="search-input"
-    />
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="search-input"
+          />
 
-    {searchQuery && (
-      <button className="clear-search-btn" onClick={handleClearSearch}>×</button>
-    )}
-
-    {/* FILTER ICON BUTTON */}
-    <button className="filter-toggle-btn" onClick={() => setShowFilters(!showFilters)}>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M3 4h18M6 12h12M10 20h4" />
-      </svg>
-    </button>
-  </div>
-
-  {/* FILTER POPUP */}
-  {showFilters && (
-    <div className="filter-popup">
-      <h4>Categories</h4>
-      <div className="category-chips">
-        {categories.map((category) => (
-          <button
-            key={category}
-            className={`category-chip ${selectedCategory === category ? 'active' : ''}`}
-            onClick={() => handleCategoryChange(category)}
-          >
-            {category}
-          </button>
-        ))}
-      </div>
-    </div>
-  )}
-</div>
-
-
-      {/* Category Filter */}
-      {/* <div className="filter-section">
-        <h3 className="filter-title">Categories</h3>
-        <div className="category-chips">
-          {categories.map((category) => (
-            <button
-              key={category}
-              className={`category-chip ${selectedCategory === category ? 'active' : ''}`}
-              onClick={() => handleCategoryChange(category)}
+          {searchQuery && (
+            <button 
+              className="clear-search-btn" 
+              onClick={handleClearSearch}
+              type="button"
             >
-              {category}
+              ×
             </button>
-          ))}
+          )}
+
+          {/* FILTER ICON BUTTON */}
+          <button 
+            className="filter-toggle-btn" 
+            onClick={toggleFilters}
+            type="button"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M3 4h18M6 12h12M10 20h4" />
+            </svg>
+          </button>
         </div>
-      </div> */}
+
+        {/* FILTER POPUP */}
+        {showFilters && (
+          <div className="filter-popup">
+            <h4>Categories</h4>
+            <div className="category-chips">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  className={`category-chip ${selectedCategory === category ? 'active' : ''}`}
+                  onClick={() => handleCategoryChange(category)}
+                  type="button"
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Active Filters Display */}
       {(searchQuery || selectedCategory !== 'All') && (
@@ -204,16 +219,16 @@ function Home() {
           {searchQuery && (
             <span className="filter-tag">
               Search: "{searchQuery}"
-              <button onClick={handleClearSearch} className="remove-filter">×</button>
+              <button onClick={handleClearSearch} className="remove-filter" type="button">×</button>
             </span>
           )}
           {selectedCategory !== 'All' && (
             <span className="filter-tag">
               Category: {selectedCategory}
-              <button onClick={() => handleCategoryChange('All')} className="remove-filter">×</button>
+              <button onClick={() => handleCategoryChange('All')} className="remove-filter" type="button">×</button>
             </span>
           )}
-          <button className="clear-all-filters" onClick={handleClearAllFilters}>
+          <button className="clear-all-filters" onClick={handleClearAllFilters} type="button">
             Clear all
           </button>
         </div>
@@ -241,7 +256,7 @@ function Home() {
                 : 'No products available at the moment'}
             </p>
             {(searchQuery || selectedCategory !== 'All') && (
-              <button className="clear-filters-btn" onClick={handleClearAllFilters}>
+              <button className="clear-filters-btn" onClick={handleClearAllFilters} type="button">
                 Clear Filters
               </button>
             )}
