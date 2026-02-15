@@ -3,6 +3,7 @@ const bcrypt=require('bcryptjs');
 const jwt=require('jsonwebtoken');
 const redis=require('../db/redis');
 const {publishToQueue}=require('../broker/broker');
+const { path } = require('../app');
 async function registerUser(req,res){
     try{
 
@@ -64,8 +65,11 @@ async function registerUser(req,res){
     },process.env.JWT_SECRET,{expiresIn:'1d'});
     //SET THAT COOKIE IN TOKEN AND PREVENT SERVER SIDE FROM ACCESSING IT 
     res.cookie('token',token,{
+        httpOnly:true,
         secure:true,
+        sameSite:'none',
         maxAge: 24*60*60*1000,
+        path:'/'
     })
     //SENDING SUCCESS RESPONSE ON CREATING USER
     res.status(201).json({
@@ -112,11 +116,13 @@ async function loginUser(req, res) {
             role: user.role
         }, process.env.JWT_SECRET, { expiresIn: '1d' });
         //set the token in cookie
-        res.cookie('token', token, {
-            
-            secure: true,
-            maxAge: 24 * 60 * 60 * 1000,
-        });
+        res.cookie('token',token,{
+        httpOnly:true,
+        secure:true,
+        sameSite:'none',
+        maxAge: 24*60*60*1000,
+        path:'/'
+    })
         //if user logged in successfully
         return res.status(200).json({
             message: 'Logged in successfully',

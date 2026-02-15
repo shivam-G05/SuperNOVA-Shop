@@ -9,12 +9,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(cors({
-  origin: [
-    "https://supernova-shop-frontend.onrender.com",
-    "https://shivamg.me",
-    "https://www.shivamg.me",
-    "https://api.shivamg.me"
-  ],  credentials: true
+  origin: "https://supernova-4suf.onrender.com"
+  ,  credentials: true
 }));
 
 
