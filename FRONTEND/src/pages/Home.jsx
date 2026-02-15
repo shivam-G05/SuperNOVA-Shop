@@ -12,6 +12,32 @@ function Home() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
+   useEffect(() => {
+    console.log('=== COOKIE DEBUG ===');
+    console.log('All cookies:', document.cookie);
+    
+    // Parse cookies
+    const cookies = document.cookie.split(';').reduce((acc, cookie) => {
+      const [key, value] = cookie.trim().split('=');
+      acc[key] = value;
+      return acc;
+    }, {});
+    
+    console.log('Parsed cookies:', cookies);
+    console.log('Token cookie:', cookies.token || 'NOT FOUND');
+    
+    // Test API call with credentials
+    fetch('https://api.shivamg.me/api/auth/me', {
+      credentials: 'include'
+    })
+    .then(r => r.json())
+    .then(data => {
+      console.log('✅ API call successful:', data);
+    })
+    .catch(err => {
+      console.error('❌ API call failed:', err);
+    });
+  }, []);
 
   const categories = [
     'All',

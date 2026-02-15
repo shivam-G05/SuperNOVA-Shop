@@ -122,6 +122,7 @@ async function loginUser(req, res) {
         sameSite:'none',
         maxAge: 24*60*60*1000,
         path:'/'
+        
     })
         //if user logged in successfully
         return res.status(200).json({
