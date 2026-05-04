@@ -7,23 +7,22 @@ const { path } = require('../app');
 
 async function registerUser(req,res){
     try{
-
-        //GET USER DETAILS FROM BODY
-    const{username,email,password,fullName:{firstName,lastName},role,addresses:{street,city,state,zip,country}}=req.body;
-    //CHECK IF USER ALREADY EXISTS OR NOT WITH USRNAME OR EMAIL
+        const { username, email, password, fullName = {}, role, addresses = {} } = req.body;
+        const { firstName, lastName } = fullName;
+        const { street, city, state, pincode, country } = addresses;
     const isUserAlreadyExists=await userModel.findOne({
         $or:[
             {username},
             {email}
         ]
     })
-    //IF EXISTS THEN RETURN 
+    
     if(isUserAlreadyExists){
         return res.status(409).json({message:"Username or email already exists"});
     };
-    //HASH THE PASSOWRD
+    
     const hash=await bcrypt.hash(password,10);
-    //CREATE THE USER IF USER DOSES NOT EXIST ALREADY
+    
     const user=await userModel.create({
         username,
         email,
@@ -37,7 +36,7 @@ async function registerUser(req,res){
             street,
             city,
             state,
-            zip,
+            pincode,
             country
         }
     })
@@ -47,7 +46,7 @@ async function registerUser(req,res){
         id:user._id,
         username:user.username,
         email:user.email,
-        fullNamr:user.fullName,
+        fullName:user.fullName,
         
     }),
      publishToQueue("AUTH_SELLER_DASHBOARD.USER_CREATED",user)
@@ -87,6 +86,7 @@ async function registerUser(req,res){
     });
     }catch(error){
         console.log("Error registering user",error);
+        return res.status(500).json({message:"Internal server error"});
     };
     
 
@@ -142,29 +142,37 @@ async function loginUser(req, res) {
     } catch (err) {
         // console.error('Error in loginUser:', err);
         return res.status(500).json({ message: 'Internal server error' });
+
     }
 }
 
 
 async function getCurrentUser(req,res){
     try{
-        const token=req.cookies.token;
-    if(!token){
-        return res.status(404).json({
-            message:"Token Not Found"
-        })
-    }
-    const decoded_user=jwt.verify(token,process.env.JWT_SECRET)
-    const user=await userModel.findById(decoded_user.id)
-    return res.status(200).json({
-        message:"User fetched successfully",
-        user
-    });
+        const token = req.cookies.token;
+        if(!token){
+            return res.status(401).json({ message: "Token Not Found" });
+        }
+        const decoded_user = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await userModel.findById(decoded_user.id);
+        if(!user){
+            return res.status(404).json({ message: "User not found" });
+        }
+        return res.status(200).json({
+            message:"User fetched successfully",
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                fullName: user.fullName,
+                role: user.role,
+                addresses: user.addresses
+            }
+        });
     }catch(err){
-    console.log("Error decoding token:", err);
-    return res.status(401).json({ message: "Invalid token" });
+        console.log("Error decoding token:", err);
+        return res.status(401).json({ message: "Invalid token" });
     }
-    
 };
 
 // async function logoutUser(req,res){

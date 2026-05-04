@@ -11,6 +11,8 @@ router.post('/login',validators.loginUserValidations,authControllers.loginUser);
 //GET-api/auth/me
 router.get('/me',authMiddleware.authMiddleware,authControllers.getCurrentUser);
 //GET-logout route
+// Logout routes (support GET for tests and POST for clients)
+router.get('/logout', authControllers.logoutUser);
 router.post('/logout',authControllers.logoutUser);
 //GET-user addresses
 router.get('/users/me/addresses',authMiddleware.authMiddleware,authControllers.getUserAddresses);
