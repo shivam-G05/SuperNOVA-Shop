@@ -65,11 +65,11 @@ async function registerUser(req,res){
     },process.env.JWT_SECRET,{expiresIn:'1d'});
     //SET THAT COOKIE IN TOKEN AND PREVENT SERVER SIDE FROM ACCESSING IT 
     res.cookie('token',token,{
-        httpOnly:true,
+        // httpOnly:true,
         secure:true,
-        sameSite:'lax',
+        // sameSite:'lax',
         maxAge: 24*60*60*1000,
-        path:'/',
+        // path:'/',
         domain: 'shivamg.me'
     })
     //SENDING SUCCESS RESPONSE ON CREATING USER
@@ -119,7 +119,7 @@ async function loginUser(req, res) {
         }, process.env.JWT_SECRET, { expiresIn: '1d' });
         //set the token in cookie
         res.cookie('token',token,{
-        httpOnly:true,
+        // httpOnly:true,
         secure:true,
         // sameSite:'lax',
         maxAge: 24*60*60*1000,
