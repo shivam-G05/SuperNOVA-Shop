@@ -9,7 +9,7 @@ export const asyncgetusers=async()=>{
         return res.data.user;
         
     }catch(err){
-        // console.log(err);
+        console.log(err);
     }
 }
 export const asynclogout = async () => {

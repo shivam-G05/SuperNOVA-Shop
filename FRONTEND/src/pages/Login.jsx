@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link, Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./Login.css";
-
+import axios from "axios";
 const Login = () => {
   const navigate = useNavigate();
   const { user, login } = useAuth();
@@ -59,36 +59,41 @@ const Login = () => {
 
     setLoading(true);
 
-    try {
-      const res = await fetch(`https://api.shivamg.me/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
-      localStorage.setItem("token", res.headers.get("Authorization")?.split(" ")[1] || "");
-
-      const data = await res.json();
-
-      if (res.ok) {
-        login(data.user); // Update auth context
-        setMessage("Login successful 🎉 Redirecting...");
-        setTimeout(() => navigate("/"), 1500);
-      } else {
-        setMessage(data.message || "Invalid credentials ❌");
-      }
-
-    } catch (error) {
-      console.error(error);
-      setMessage("Server error. Please try again later.");
-    } finally {
-      setLoading(false);
+    
+try {
+  const res = await axios.post(
+    "https://api.shivamg.me/api/auth/login",
+    {
+      username: formData.username,
+      email: formData.email,
+      password: formData.password,
+    },
+    {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
     }
-  };
+  );
+
+  console.log("Login response:", res);
+
+  login(res.data.user);
+  setMessage("Login successful 🎉 Redirecting...");
+
+  setTimeout(() => navigate("/"), 1500);
+
+} catch (error) {
+  console.error("Login error:", error);
+
+  setMessage(
+    error.response?.data?.message ||
+    "Server error. Please try again later."
+  );
+
+} finally {
+  setLoading(false);
+}}
 
   return (
     <div className="login-container">
