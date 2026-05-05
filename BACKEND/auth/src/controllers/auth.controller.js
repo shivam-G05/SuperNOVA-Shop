@@ -121,9 +121,9 @@ async function loginUser(req, res) {
         res.cookie('token',token,{
         httpOnly:true,
         secure:true,
-        sameSite:'lax',
+        // sameSite:'lax',
         maxAge: 24*60*60*1000,
-        path:'/',
+        // path:'/',
         domain: 'shivamg.me'
         
     })
@@ -156,6 +156,8 @@ async function getCurrentUser(req,res){
         const decoded_user = jwt.verify(token, process.env.JWT_SECRET);
         const user = await userModel.findById(decoded_user.id);
         if(!user){
+            console.log(decoded_user);
+            console.log(user);
             return res.status(404).json({ message: "User not found" });
         }
         return res.status(200).json({
