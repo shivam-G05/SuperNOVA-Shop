@@ -7,8 +7,11 @@ const app=express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: "https://supernova-4suf.onrender.com"
-  ,  credentials: true
+  origin: [
+    "https://supernova-4suf.onrender.com",  // Render URL
+    "https://www.shivamg.me",                // Custom domain with www
+    "https://shivamg.me"                     // Custom domain without www
+  ], credentials: true
 }));
 
 app.get('/', (req, res) => {

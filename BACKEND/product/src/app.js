@@ -5,8 +5,11 @@ const cors=require('cors');
 const productRoutes=require('./routes/product.route');
 const app=express();
 app.use(cors({
-  origin: "https://supernova-4suf.onrender.com"
-  ,  credentials: true
+  origin: [
+    "https://supernova-4suf.onrender.com",  // Render URL
+    "https://www.shivamg.me",                // Custom domain with www
+    "https://shivamg.me"                     // Custom domain without www
+  ], credentials: true
 }));
 
 
