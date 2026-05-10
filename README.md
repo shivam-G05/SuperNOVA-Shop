@@ -1,6 +1,10 @@
 # 🚀 SuperNOVA Shop
 
 A full-stack **e-commerce microservices application** built with React, Node.js, Docker, and deployed on AWS EC2 with a custom domain via Cloudflare.
+<img width="1880" height="857" alt="Screenshot 2026-05-05 172912" src="https://github.com/user-attachments/assets/0eaaa1d8-28ae-41b5-83ed-716ee77f3403" />
+
+<img width="1892" height="863" alt="Screenshot 2026-05-05 172835" src="https://github.com/user-attachments/assets/13a0f66d-ff04-45c2-9cbf-dfe9715adfc1" /><img width="1878" height="853" alt="Screenshot 2026-05-05 172846" src="https://github.com/user-attachments/assets/07dad700-949e-48f1-98da-ebd7d552228e" />
+
 
 ![SuperNOVA Shop](https://img.shields.io/badge/Status-Live-brightgreen)
 ![React](https://img.shields.io/badge/React-18-blue)
@@ -480,7 +484,8 @@ res.cookie('token', token, {
   secure: true,
   sameSite: 'none',
   maxAge: 24 * 60 * 60 * 1000,
-  path: '/'
+  path: '/',
+  domaine: '.shivamg.me'
 });
 ```
 
@@ -513,15 +518,14 @@ proxy_read_timeout 86400;
 
 **Shivam Goel**
 
-- GitHub: [@yourusername](https://github.com/shivam-G05)
+- GitHub: [@shivam-G05](https://github.com/shivam-G05)
 - LinkedIn: [Shivam Goel](https://www.linkedin.com/in/shivam-goel-6236432a8/)
 - Email: shivamkgjj2005@gmail.com
 
 ---
 
 ## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT
 
 ---
 
