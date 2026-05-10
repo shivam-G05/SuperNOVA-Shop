@@ -46,7 +46,7 @@ const OrderDetail = () => {
         street: orderData.shippingAddress.street,
         city: orderData.shippingAddress.city,
         state: orderData.shippingAddress.state,
-        pincode: orderData.shippingAddress.pincode,
+        pincode: orderData.shippingAddress.pincode || "",
         country: orderData.shippingAddress.country || "",
       });
     } catch (err) {
