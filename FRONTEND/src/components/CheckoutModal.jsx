@@ -54,13 +54,19 @@ const CheckoutModal = ({ isOpen, onClose, cartTotal }) => {
     const address = addresses.find(addr => addr._id === selectedAddress);
     if (!address) return;
     console.log("Selected address for order:", address);
-    
+
+    // Prefer explicit pincode, fall back to common alternatives like `zip`/`zipcode`
+    const pincodeValue = address.pincode || address.zip || address.zipcode || address.postal || address.postalCode;
+    if (!pincodeValue || String(pincodeValue).trim() === "") {
+      alert("Selected address is missing a PIN/ZIP code. Please add it in your profile before placing the order.");
+      return;
+    }
 
     const shippingAddress = {
       street: address.street,
       city: address.city,
       state: address.state,
-      pincode: address.pincode,
+      pincode: String(pincodeValue).trim(),
       country: address.country || "India",
       isDefault: address.isDefault || false,
     };
